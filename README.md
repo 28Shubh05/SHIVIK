@@ -26,5 +26,40 @@ A feature-rich **Flutter movie application** with Firebase authentication, searc
 
 ## 📸 Screenshots
 
+### 🔹 Splash Screen  
+<video width="300" controls>
+  <source src="screenshots/SplashScreen.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
-(Add relevant screenshots here)
+### 🔹 Onborading
+<video width="300" controls>
+  <source src="screenshots/OnboardingPage.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+### 🔹 Home Screen  
+<img src="screenshots/HomePage0.jpg" width="300">
+<img src="screenshots/HomePage1.jpg" width="300">
+
+### 🔹 SignUp Screen  
+<img src="screenshots/SignUpPage.jpg" width="300">
+
+### 🔹 Password Screen  
+<img src="screenshots/PasswordPage.jpg" width="300">
+
+### 🔹 SignIn Screen  
+<img src="screenshots/SignInPage.jpg" width="300">
+
+### 🔹 Search Screen  
+<img src="screenshots/SearchPage.jpg" width="300">
+
+### 🔹 Movie Details Page 
+<img src="screenshots/MovieDetailPage.jpg" width="300">
+<img src="screenshots/MovieDetailPage2.jpg" width="300">
+
+### 🔹 Watch Page 
+<img src="screenshots/WatchPage.jpg" width="300">
+
+### 🔹 User Page 
+<img src="screenshots/UserPage.jpg" width="300">
