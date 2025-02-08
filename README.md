@@ -27,16 +27,10 @@ A feature-rich **Flutter movie application** with Firebase authentication, searc
 ## 📸 Screenshots
 
 ### 🔹 Splash Screen  
-<video width="300" controls>
-  <source src="screenshots/SplashScreen.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<img src="screenshots/SplashScreen.gif" width="300">
 
 ### 🔹 Onborading
-<video width="300" controls>
-  <source src="screenshots/OnboardingPage.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<img src="screenshots/OnboardingPage.gif" width="300">
 
 ### 🔹 Home Screen  
 <img src="screenshots/HomePage0.jpg" width="300">
