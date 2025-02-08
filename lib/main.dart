@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/pages/OnBoarding.dart';
 import 'package:movie_app/pages/SplashScreen.dart';
 import 'package:movie_app/pages/movie_details.dart';
 import 'package:movie_app/pages/password.dart';
