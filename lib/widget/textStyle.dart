@@ -10,6 +10,15 @@ class AppWidget {
     );
   }
 
+  static blackHeadingTextFieldStyle(){
+    return const TextStyle(
+      color: Colors.black,
+      fontSize: 32,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'Garet',
+    );
+  }
+
   static boldTextFieldStyle(){
     return const TextStyle(
       color: Colors.white,
@@ -28,11 +37,20 @@ class AppWidget {
     );
   }
 
+  static semiBoldBigTextFieldStyle(){
+    return const TextStyle(
+      color: Color(0xffe4e4e4),
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Garet',
+    );
+  }
+
   static semiBoldTextFieldStyle(){
     return const TextStyle(
       color: Color(0xffe4e4e4),
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
       fontFamily: 'Garet',
     );
   }
@@ -40,7 +58,7 @@ class AppWidget {
   static blackSemiBoldTextFieldStyle(){
     return const TextStyle(
       color: Colors.black,
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: FontWeight.bold,
       fontFamily: 'Garet',
     );
@@ -48,8 +66,16 @@ class AppWidget {
 
   static lightTextFieldStyle(){
     return const TextStyle(
-      color: Color(0xffe4e4e4),
-      fontSize: 16,
+      color: Colors.white70,
+      fontSize: 14,
+      fontFamily: 'Garet',
+    );
+  }
+
+  static blackLightTextFieldStyle(){
+    return const TextStyle(
+      color: Colors.black,
+      fontSize: 14,
       fontFamily: 'Garet',
     );
   }
