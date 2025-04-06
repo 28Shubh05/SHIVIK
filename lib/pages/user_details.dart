@@ -1,8 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/Content/hash_fun.dart';
 import 'package:movie_app/Content/movieDetailsContent.dart';
 import 'package:movie_app/widget/textStyle.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 import 'movie_details.dart';
+
+
+List<Color> _generateColorList(int count) {
+  // Base set of distinct colors
+  final baseColors = [
+    Colors.red,
+    Colors.blue,
+    Colors.green,
+    Colors.yellow,
+    Colors.purple,
+    Colors.orange,
+    Colors.teal,
+    Colors.pink,
+    Colors.indigo,
+    Colors.cyan,
+    Colors.lime,
+    Colors.amber,
+  ];
+
+  // If we need more colors than we have base colors, generate variations
+  if (count > baseColors.length) {
+    return List<Color>.generate(count, (index) {
+      // Use base colors first, then generate variations
+      if (index < baseColors.length) {
+        return baseColors[index];
+      } else {
+        // Generate colors with different hues
+        return Colors.primaries[index % Colors.primaries.length]
+            .withOpacity(0.7)
+            .withBlue((index * 30) % 360);
+      }
+    });
+  } else {
+    return baseColors.sublist(0, count);
+  }
+}
 
 class UserTabContent extends StatefulWidget {
   @override
@@ -14,6 +52,12 @@ class _UserTabContentState extends State<UserTabContent> {
   Widget build(BuildContext context) {
     double height = MediaQuery.sizeOf(context).height;
     double width = MediaQuery.sizeOf(context).width;
+    final userContentTags = MovieDetailsData.getUserContentTags();
+    Map<String, double> tagsMap = {
+      for (var tag in userContentTags)
+        tag.tagName: tag.tagValue
+    };
+    final hashedTag = getHashedTags(userContentTags);
     return Scaffold(
       backgroundColor: Colors.black,
       body: CustomScrollView(
@@ -116,6 +160,53 @@ class _UserTabContentState extends State<UserTabContent> {
                             height: height/3,
                             child: Favourite(onFavoritesChanged: () => setState(() {}))
                         ),
+                        SizedBox(height: height/20,),
+                        Text("User Tab Values :" , style: AppWidget.semiBoldBigTextFieldStyle(),),
+                        SizedBox(height: height/20,),
+                        if(tagsMap.isEmpty)
+                            Center(child: Text("No Tags added" , style: AppWidget.lightTextFieldStyle(),))
+                        else
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 100),
+                            child: SizedBox(
+                              width: width,
+                              child: PieChart(
+                                dataMap: tagsMap,
+                                animationDuration: Duration(milliseconds: 800),
+                                chartLegendSpacing: 110,
+                                chartRadius: MediaQuery.of(context).size.width / 2.5,
+                                colorList: _generateColorList(tagsMap.length),
+                                initialAngleInDegree: 0,
+                                chartType: ChartType.ring,
+                                ringStrokeWidth: 200,
+                                legendOptions: const LegendOptions(
+                                  showLegendsInRow: true,
+                                  legendPosition: LegendPosition.bottom,
+                                  showLegends: true,
+                                  legendShape: BoxShape.circle,
+                                  legendTextStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                chartValuesOptions: const ChartValuesOptions(
+                                  showChartValueBackground: false,
+                                  showChartValues: true,
+                                  showChartValuesInPercentage: true,
+                                  showChartValuesOutside: true,
+                                  decimalPlaces: 0,
+                                  chartValueStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 6
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
                       ],
                     ),
                   ),

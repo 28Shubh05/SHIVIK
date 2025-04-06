@@ -6,7 +6,9 @@ class MovieDetailsContent{
   final String genre;
   final String description;
   bool like;
+  bool addList = false;
   bool watched = false;
+  bool info = false;
   final Map<String , String> cast;
   final List<ContentTag> tags;
 
@@ -17,9 +19,12 @@ class MovieDetailsContent{
     required this.duration,
     required this.genre,
     required this.description,
+    required this.addList,
     required this.like,
     required this.cast,
     required this.tags,
+    this.watched = false,
+    this.info = false,
   });
 
   MovieDetailsContent copyWith({
@@ -30,6 +35,9 @@ class MovieDetailsContent{
     String? genre,
     String? description,
     bool? like,
+    bool? addList,
+    bool? watched,
+    bool? info,
     Map<String, String>? cast,
     List<ContentTag>? tags,
   }) {
@@ -40,7 +48,10 @@ class MovieDetailsContent{
       duration: duration ?? this.duration,
       genre: genre ?? this.genre,
       description: description ?? this.description,
+      addList: addList ?? this.addList,
       like: like ?? this.like,
+      watched: watched ?? this.watched,
+      info: info ?? this.info,
       cast: cast ?? this.cast,
       tags: tags ?? this.tags,
     );
@@ -57,6 +68,121 @@ class ContentTag{
   } );
 }
 
+//splay trees
+
+class SplayTreeNode {
+  final String key;  // Movie name as key
+  final MovieDetailsContent movie;
+  double tagValue;
+  SplayTreeNode? left;
+  SplayTreeNode? right;
+
+  SplayTreeNode({
+    required this.key,
+    required this.movie,
+    required this.tagValue,
+    this.left,
+    this.right,
+  });
+}
+
+class SplayTree {
+  SplayTreeNode? root;
+
+  SplayTreeNode _rotateRight(SplayTreeNode node) {
+    final newRoot = node.left!;
+    node.left = newRoot.right;
+    newRoot.right = node;
+    return newRoot;
+  }
+
+  SplayTreeNode _rotateLeft(SplayTreeNode node) {
+    final newRoot = node.right!;
+    node.right = newRoot.left;
+    newRoot.left = node;
+    return newRoot;
+  }
+
+  SplayTreeNode? _splay(SplayTreeNode? root, String key) {
+    if (root == null || root.key == key) {
+      return root;
+    }
+
+    if (key.compareTo(root.key) < 0) {
+      if (root.left == null) return root;
+      if (key.compareTo(root.left!.key) < 0) {
+        root.left!.left = _splay(root.left!.left, key);
+        root = _rotateRight(root);
+      } else if (key.compareTo(root.left!.key) > 0) {
+        root.left!.right = _splay(root.left!.right, key);
+        if (root.left!.right != null) {
+          root.left = _rotateLeft(root.left!);
+        }
+      }
+      return root.left == null ? root : _rotateRight(root);
+    } else {
+      if (root.right == null) return root;
+      if (key.compareTo(root.right!.key) < 0) {
+        root.right!.left = _splay(root.right!.left, key);
+        if (root.right!.left != null) {
+          root.right = _rotateRight(root.right!);
+        }
+      } else if (key.compareTo(root.right!.key) > 0) {
+        root.right!.right = _splay(root.right!.right, key);
+        root = _rotateLeft(root);
+      }
+      return root.right == null ? root : _rotateLeft(root);
+    }
+  }
+
+  void insert(MovieDetailsContent movie, double tagValue) {
+    if (root == null) {
+      root = SplayTreeNode(key: movie.name, movie: movie, tagValue: tagValue);
+      return;
+    }
+
+    root = _splay(root, movie.name);
+
+    if (movie.name.compareTo(root!.key) < 0) {
+      final newNode = SplayTreeNode(
+        key: movie.name,
+        movie: movie,
+        tagValue: tagValue,
+      );
+      newNode.left = root!.left;
+      newNode.right = root;
+      root!.left = null;
+      root = newNode;
+    } else if (movie.name.compareTo(root!.key) > 0) {
+      final newNode = SplayTreeNode(
+        key: movie.name,
+        movie: movie,
+        tagValue: tagValue,
+      );
+      newNode.right = root!.right;
+      newNode.left = root;
+      root!.right = null;
+      root = newNode;
+    } else {
+      root!.tagValue = tagValue;
+    }
+  }
+
+  MovieDetailsContent? removeRoot() {
+    if (root == null) return null;
+
+    final movie = root!.movie;
+    if (root!.left == null) {
+      root = root!.right;
+    } else {
+      final rightChild = root!.right;
+      root = _splay(root!.left!, root!.key);
+      root!.right = rightChild;
+    }
+    return movie;
+  }
+}
+
 class MovieDetailsData{
   static final List<MovieDetailsContent> _movies = [
       MovieDetailsContent(
@@ -67,6 +193,7 @@ class MovieDetailsData{
           genre: "Action | Crime | Drama | Thriller",
           description: "As a criminal mastermind manipulates the police to carry out his plot, twelve robbers kidnap and lock themselves up in the Royal Casino of Italy. The strategy has a national cost and ends up being an all-out conflict.",
           like: false,
+          addList: false,
           cast: {
             "Robert De Niro" : "https://cdn.britannica.com/00/213300-050-ADF31CD9/American-actor-Robert-De-Niro-2019.jpg" ,
             "Jeffrey Dean Morgan" : "https://preview.redd.it/jeffrey-dean-morgan-thats-it-v0-ixrjtmareoqb1.jpg?width=400&format=pjpg&auto=webp&s=9a0d0730560c983dc928c0ad811ed86f7d2afe56" ,
@@ -102,6 +229,7 @@ class MovieDetailsData{
         genre: "Dark Comedy | Korean Drama | Thriller",
         description: "A odd offer to compete in children's games is accepted by a large number of cash-strapped players. A enticing treasure with deadly high stakes awaits you inside. ",
           like: false,
+          addList: false,
           cast: {
           "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
           "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -136,6 +264,7 @@ class MovieDetailsData{
           genre: "Action | Horror | Sci-fi",
           description: "Milo Thatch, a young linguist, joins an adventurous gang of explorers on a quest to discover the mythical lost island of riches lost beneath the sea.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -152,7 +281,6 @@ class MovieDetailsData{
             ContentTag(tagName: "Maps", tagValue: 3.5),
             ContentTag(tagName: "Ship", tagValue: 1.5),
             ContentTag(tagName: "Cartography", tagValue: 3.0),
-            ContentTag(tagName: "Water", tagValue: 3.0),
             ContentTag(tagName: "Under", tagValue: 3.0),
             ContentTag(tagName: "Navigation", tagValue: 2.5),
             ContentTag(tagName: "Atlantis", tagValue: 3.5),
@@ -173,6 +301,7 @@ class MovieDetailsData{
           genre: "Comedy | Drama | Crime",
           description: "With nothing but a handful of souls and a lot of ambition, two buddies set off to travel the world.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -204,6 +333,7 @@ class MovieDetailsData{
           genre: "Action | Adventure | Mystery",
           description: "Detective Hazlock Shomes and his stalwart partner Watson face up against a villain whose plot threatens the entire United Kingdom.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -239,6 +369,7 @@ class MovieDetailsData{
           genre: "Crime | Drama",
           description: "When the son of a powerful Mafia don returns home from Vietnam, he wants to live his own life, but family tradition, intrigues, and powerplays involving his older brother prevent him from doing so.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -275,6 +406,7 @@ class MovieDetailsData{
           genre: "Horror | Mystery | Thriller",
           description: "In the summer of 1989, a group of bullied youngsters band together to stop a shape-shifting monster from posing as a clown and preying on the children of Derry, Maine.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -310,6 +442,7 @@ class MovieDetailsData{
           genre: "Horror | Mystery | Thriller",
           description: "A salvage crew uncovers a long-lost 1662 passenger ship floating lifeless in a remote Caribbean Sea location, and quickly realises that its long-dead passengers may still be on board.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -343,6 +476,7 @@ class MovieDetailsData{
           genre: "Action | Adventure | Sci-fi",
           description: "The aliens are coming and their goal is to invade and destroy Earth. Fighting superior technology, mankind's best weapon is the will to survive.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -383,6 +517,7 @@ class MovieDetailsData{
           genre: "Action | Adventure | Sci-fi | Thriller",
           description: "Johnny Rico, a Federation trooper, is assigned to work with a bunch of new recruits on a Mars satellite station where huge bugs have chosen to launch their next attack. Humans must now fight this futuristic battle in order to survive.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -422,6 +557,7 @@ class MovieDetailsData{
           genre: "Adventure | Action |  Sci-fi | Animation | Comedy | Drama | Thriller",
           description: "A canine star of a fictional sci-fi/action show who believes his abilities are real sets out on a cross-country journey to save his co-star from a threat he believes is equally real.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -447,6 +583,7 @@ class MovieDetailsData{
           genre: "Action | Adventure | Animation",
           description: "Princess Maria opposes a tradition that causes havoc in her realm, determined to forge her own path in life. Maria is given one wish and must use her bravery and aviation abilities to break a monstrous curse.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -473,6 +610,7 @@ class MovieDetailsData{
           genre: "Biography | Drama | War",
           description: "Following the death of Alexander III of Scotland, who died without an heir, King Edward invades and conquers Scotland. William Wallace, a Scottish warrior, launches a revolt against King Edward I of England to free his nation.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -509,6 +647,7 @@ class MovieDetailsData{
           genre: "Biography | Drama | Thriller | Crime | Action",
           description: "The actual account of Captain Richard Phillips and the 2009 seizure of the US-flagged MV Maersk Alabama by Somali pirates, the first hijacking of an American cargo ship in two centuries.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -545,6 +684,7 @@ class MovieDetailsData{
           genre: "Cyberpunk | Sci-fi | Action",
           description: "When Neo is led to a foreboding underworld by a gorgeous stranger, he discovers the horrifying truth: the life he knows is a complex lie perpetrated by an evil cyber-intelligence.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -577,6 +717,7 @@ class MovieDetailsData{
           genre: "Adventure | Drama | Fantasy",
           description: "Even as dark powers attempt to break the Round Table of Camelot apart, Morin the magician aids Arakan Pendragon in uniting the Britons around it.",
           like: false,
+          addList: false,
           cast: {
             "Tom Choi" : "https://images.mubicdn.net/images/cast_member/481715/cache-745112-1640245781/image-w856.jpg" ,
             "Lee Jung-jae" : "https://i.mydramalist.com/2zEwW_5f.jpg" ,
@@ -619,14 +760,128 @@ class MovieDetailsData{
     }
   }
 
+  static void toggleAddList(int index) {
+    if (index >= 0 && index < _movies.length) {
+      _movies[index] = _movies[index].copyWith(addList: !_movies[index].addList);
+    } else {
+      throw RangeError('Invalid movie index: $index');
+    }
+  }
+
+  static List<MovieDetailsContent> getAddListMovies() {
+    return _movies.where((movie) => movie.addList).toList();
+  }
+
   static List<MovieDetailsContent> searchByName(String query) {
     return _movies.where((movie) =>
         movie.name.toLowerCase().contains(query.toLowerCase())
     ).toList();
   }
 
-  // Get favorite movies (liked movies)
   static List<MovieDetailsContent> getFavoriteMovies() {
     return _movies.where((movie) => movie.like).toList();
   }
+
+  static List<ContentTag> getUserContentTags() {
+    // Create a map to track the accumulation of tag values
+    Map<String, double> userTagValues = {};
+
+    // Process all movies and accumulate tag values based on user interactions
+    for (var movie in _movies) {
+      // Calculate the contribution factor for each interaction
+      double watchedFactor = movie.watched ? 0.25 : 0;
+      double likeFactor = movie.like ? 0.25 : 0;
+      double addListFactor = movie.addList ? 0.25 : 0;
+      double infoFactor = movie.info ? 0.25 : 0;
+
+      // Total contribution factor for this movie
+      double totalFactor = watchedFactor + likeFactor + addListFactor + infoFactor;
+
+      // If there's any interaction, process the tags
+      if (totalFactor > 0) {
+        for (var tag in movie.tags) {
+          // Scale the tag value by the total factor
+          double contributionValue = tag.tagValue * totalFactor;
+
+          // Add to existing value or create new entry
+          if (userTagValues.containsKey(tag.tagName)) {
+            userTagValues[tag.tagName] = userTagValues[tag.tagName]! + contributionValue;
+          } else {
+            userTagValues[tag.tagName] = contributionValue;
+          }
+        }
+      }
+    }
+
+    // Convert the map to a list of ContentTag objects
+    List<ContentTag> userContentTags = userTagValues.entries
+        .map((entry) => ContentTag(tagName: entry.key, tagValue: entry.value))
+        .toList();
+
+    // Sort by tag value (highest first)
+    userContentTags.sort((a, b) => b.tagValue.compareTo(a.tagValue));
+
+    return userContentTags;
+  }
+
+  static Map<String, SplayTree> buildSplayTreesForTopTags(List<ContentTag> userContentTags) {
+    final topTags = userContentTags.take(5).toList();
+    final splayTrees = <String, SplayTree>{};
+
+    for (final tag in topTags) {
+      splayTrees[tag.tagName] = SplayTree();
+    }
+
+    for (final movie in _movies) {
+      for (final tag in movie.tags) {
+        if (splayTrees.containsKey(tag.tagName)) {
+          splayTrees[tag.tagName]!.insert(movie, tag.tagValue);
+        }
+      }
+    }
+
+    return splayTrees;
+  }
+
+  static List<MovieDetailsContent> generateRecommendations(Map<String, SplayTree> splayTrees) {
+    final recommendations = <MovieDetailsContent>[];
+    final tagNames = splayTrees.keys.toList();
+
+    // Take 3 movies from first 2 tags
+    for (int i = 0; i < 2 && i < tagNames.length; i++) {
+      final tree = splayTrees[tagNames[i]]!;
+      int count = 0;
+      while (count < 3) {
+        final movie = tree.removeRoot();
+        if (movie == null) break; // No more movies in this tree
+        if (!recommendations.contains(movie) && !movie.watched) {
+          recommendations.add(movie);
+          count++;
+        }
+      }
+    }
+
+    // Take 2 movies from remaining tags
+    for (int i = 2; i < tagNames.length; i++) {
+      final tree = splayTrees[tagNames[i]]!;
+      int count = 0;
+      while (count < 2) {
+        final movie = tree.removeRoot();
+        if (movie == null) break; // No more movies in this tree
+        if (!recommendations.contains(movie) && !movie.watched) {
+          recommendations.add(movie);
+          count++;
+        }
+      }
+    }
+
+    return recommendations;
+  }
+
+  static List<MovieDetailsContent> getMovieRecommendations() {
+    final userContentTags = getUserContentTags();
+    final splayTrees = buildSplayTreesForTopTags(userContentTags);
+    return generateRecommendations(splayTrees);
+  }
+
 }

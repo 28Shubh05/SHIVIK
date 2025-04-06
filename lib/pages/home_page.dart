@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:movie_app/pages/recommended_movies.dart';
 import 'package:movie_app/pages/searchTab.dart';
 import 'package:movie_app/pages/user_details.dart';
 import 'package:movie_app/pages/watch_movie.dart';
+import 'package:movie_app/widget/textStyle.dart';
 import '../Content/movieDetailsContent.dart';
+import 'add_list.dart';
 import 'home_page_movie_list.dart';
 import 'movie_details.dart';
 
@@ -22,19 +25,25 @@ class _HomePageState extends State<HomePage> {
     final kTabPages = <Widget>[
       const HomeTabContent(),
       SearchTabContent(),
+      AddList(),
       UserTabContent(),
     ];
 
     final kBottomNavBarItems = <BottomNavigationBarItem>[
-      BottomNavigationBarItem(
-          icon: const Icon(Icons.home, color: Colors.white),
-          activeIcon: const Icon(Icons.home, color: Colors.deepPurple),
+      const BottomNavigationBarItem(
+          icon: Icon(Icons.home, color: Colors.white),
+          activeIcon: Icon(Icons.home, color: Colors.deepPurple),
           label: 'Home'
       ),
-      BottomNavigationBarItem(
-          icon: const Icon(Icons.search, color: Colors.white),
-          activeIcon: const Icon(Icons.search, color: Colors.deepPurple),
+      const BottomNavigationBarItem(
+          icon: Icon(Icons.search, color: Colors.white),
+          activeIcon: Icon(Icons.search, color: Colors.deepPurple),
           label: 'Search'
+      ),
+      BottomNavigationBarItem(
+          icon: const Icon(Icons.library_add, color: Colors.white),
+          activeIcon: const Icon(Icons.library_add, color: Colors.deepPurple),
+          label: 'List'
       ),
       BottomNavigationBarItem(
           icon: const Icon(Icons.account_circle, color: Colors.white),
@@ -119,7 +128,7 @@ class _HomeTabContentState extends State<HomeTabContent> {
 
   Widget _buildImageSlider(double height, double width) {
     return SizedBox(
-      height: height * 0.61,
+      height: height * 0.645,
       width: width/1.1,
       child: Stack(
         children: [
@@ -333,9 +342,10 @@ class _HomeTabContentState extends State<HomeTabContent> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: height/20),
+            SizedBox(height: height/40),
             _buildImageSlider(height, width),
             const SizedBox(height: 20),
+            const RecommendedMovies(),
             const Padding(
               padding: EdgeInsets.only(right: 8.0, left: 8.0),
               child: HomePageMovieList(),

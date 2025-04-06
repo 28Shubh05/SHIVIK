@@ -23,7 +23,8 @@ class _MovieDetailsState extends State<MovieDetails> {
       // Get the index from route arguments after the widget is built
       index = ModalRoute.of(context)!.settings.arguments as int;
       allMovies = MovieDetailsData.getMovieDetail();  // Get all movies once
-      movie = allMovies[index];  // Reference the movie from allMovies
+      movie = allMovies[index];
+      movie.info = true;// Reference the movie from allMovies
       setState(() {}); // Trigger a rebuild with the initialized data
     });
   }
@@ -90,10 +91,13 @@ class _MovieDetailsState extends State<MovieDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                    height: height/2.2,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    height: height/2,
                     width: width,
-                    child: Image.network(movie.poster , fit: BoxFit.fill,),
+                    child: Image.network(movie.poster, fit: BoxFit.fill),
+                  ),
                 ),
                 SizedBox(height: height/40,),
                 Row(
