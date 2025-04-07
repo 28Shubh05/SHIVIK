@@ -35,7 +35,7 @@ A feature-rich **Flutter movie application** with Firebase authentication, searc
 <img src="screenshots/HomePage2.jpg" width="300">
 
 ### 🔹 Addlist Screen 
-<img src="screenshots/AddListPage.jpg" width="300">
+<img src="screenshots/AddlistPage.jpg" width="300">
 
 <!--### 🔹 SignUp Screen  
 <img src="screenshots/SignUpPage.jpg" width="300">
@@ -51,8 +51,8 @@ A feature-rich **Flutter movie application** with Firebase authentication, searc
 <img src="screenshots/SearchPage2.jpg" width="300">
 
 ### 🔹 Movie Details Page 
-<img src="screenshots/MovieDetailPage.jpg" width="300">
 <img src="screenshots/MovieDetailPage2.jpg" width="300">
+<img src="screenshots/MovieDetailPage.jpg" width="300">
 
 ### 🔹 Watch Page 
 <img src="screenshots/WatchPage.jpg" width="300">
