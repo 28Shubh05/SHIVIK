@@ -74,3 +74,6 @@ A feature-rich **Flutter movie application** with Firebase authentication, searc
 -  loading_animation_widget:
 -  pie_chart:
 
+
+## Team - 
+### Shubham Sharma
