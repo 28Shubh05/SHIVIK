@@ -7,6 +7,8 @@ A feature-rich **Flutter movie application** with Firebase authentication, searc
 
 ## 📌 Features
 
+### Frontend-
+
 - **Home Page**: Displays a list of available movies
 - **Search Page**: Search movies by title or genre
 - **Movie Detail Page**: View details of selected movies
@@ -16,6 +18,11 @@ A feature-rich **Flutter movie application** with Firebase authentication, searc
 - **Favorites List**: Save and view favorite movies
 - **Previously Watched List**: Keep track of watch history
 
+### Backend - 
+- **MovieDetailContent**: Stores Movie data with content tags
+- **Splay Trees**: Used to find the most related movies easily
+- **User Content Tags**: Stores content tags of a user
+- **Generate Recomendation**: Generate list of movies with similar content tags as user 
 
 ## 🚀 Tech Stack
 
@@ -60,3 +67,10 @@ A feature-rich **Flutter movie application** with Firebase authentication, searc
 ### 🔹 User Page 
 <img src="screenshots/UserPage.jpg" width="300">
 <img src="screenshots/UserPage2.jpg" width="300">
+
+## Packages Used 
+-  cupertino_icons: ^1.0.8
+-  animated_splash_screen:
+-  loading_animation_widget:
+-  pie_chart:
+
