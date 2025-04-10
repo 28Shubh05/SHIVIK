@@ -17,6 +17,7 @@ A feature-rich **Flutter movie application** with Firebase authentication, searc
 - **Addlist Page**: Add movies in your Playlist
 - **Favorites List**: Save and view favorite movies
 - **Previously Watched List**: Keep track of watch history
+- **Recommended Movie list**: Recommended movies according to user tags
 
 ### Backend - 
 - **MovieDetailContent**: Stores Movie data with content tags
@@ -67,6 +68,9 @@ A feature-rich **Flutter movie application** with Firebase authentication, searc
 ### 🔹 User Page 
 <img src="screenshots/UserPage.jpg" width="300">
 <img src="screenshots/UserPage2.jpg" width="300">
+
+### 🔹 Recommended Movies List
+<img src="screenshots/recommended_movies.jpg" width="300">
 
 ## Packages Used 
 -  cupertino_icons: ^1.0.8
